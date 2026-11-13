@@ -20,8 +20,22 @@ sous-titres-en-fr/
 
 ## Installation
 
-- **Claude (claude.ai, application)** : zippe le dossier `sous-titres-en-fr/` (celui qui contient `SKILL.md`) et importe-le dans les paramètres des skills.
+- **Claude (claude.ai, application)** : télécharge `sous-titres-en-fr.zip` depuis la [dernière release](https://github.com/SousTitreFR/claude-skill-sous-titres-en-fr/releases/latest) et importe-le dans les paramètres des skills.
 - **Claude Code** : copie le dossier `sous-titres-en-fr/` dans `~/.claude/skills/`.
+
+## Versions et mises à jour
+
+La version installée figure dans l'en-tête de `SKILL.md` (`metadata.version`), et les changements sont listés dans [CHANGELOG.md](CHANGELOG.md).
+
+À chaque contrôle d'un `.srt`, `check.py` compare la version installée à celle du dépôt. Si une version plus récente existe, il affiche `Info : version X disponible`. Sans connexion, il n'affiche rien. Rien n'est mis à jour automatiquement : il faut réimporter le zip, ou recopier le dossier.
+
+Pour publier une version :
+
+1. Change `version` dans `sous-titres-en-fr/SKILL.md`.
+2. Ajoute l'entrée `## [X.Y.Z] - AAAA-MM-JJ` dans `CHANGELOG.md`.
+3. Commit, puis `git tag vX.Y.Z && git push --follow-tags`.
+
+La GitHub Action vérifie alors que le tag, `SKILL.md` et le changelog concordent. Elle crée ensuite la release, avec le zip joint.
 
 ## Utilisation
 

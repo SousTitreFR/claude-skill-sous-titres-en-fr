@@ -2,7 +2,23 @@
 
 Usage : python3 check.py original.srt original_FR.srt
 """
-import re, sys
+import re, sys, urllib.request
+from pathlib import Path
+REPO = 'SousTitreFR/claude-skill-sous-titres-en-fr'
+RAW_SKILL = f'https://raw.githubusercontent.com/{REPO}/main/sous-titres-en-fr/SKILL.md'
+def version(text):
+    m = re.search(r'^\s*version:\s*"?(\d+(?:\.\d+)*)', text, re.M)
+    return tuple(map(int, m.group(1).split('.'))) if m else None
+def check_update():
+    try:
+        local = version((Path(__file__).parent / 'SKILL.md').read_text(encoding='utf-8'))
+        with urllib.request.urlopen(RAW_SKILL, timeout=3) as r:
+            remote = version(r.read().decode('utf-8'))
+    except Exception:
+        return  # hors ligne ou SKILL.md absent : l'alerte de mise à jour est facultative
+    if local and remote and remote > local:
+        fmt = lambda v: '.'.join(map(str, v))
+        print(f'Info : version {fmt(remote)} disponible (installée : {fmt(local)}) -> https://github.com/{REPO}/releases/latest')
 src, out = sys.argv[1], sys.argv[2]
 def blocks(p):
     t = open(p, encoding='utf-8-sig', errors='replace').read().replace('\r\n', '\n').strip()
@@ -35,3 +51,4 @@ for n, b in enumerate(B, 1):
             err.append(f'Bloc {num} : majuscule suspecte -> {l}')
 print(f'Info : {len(A)} blocs EN, {len(B)} blocs FR ({len(A) - len(B)} supprimés au nettoyage)')
 print('\n'.join(err) or 'OK : aucune erreur')
+check_update()
