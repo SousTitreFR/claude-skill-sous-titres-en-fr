@@ -33,7 +33,7 @@ Pour publier une version :
 
 1. Change `version` dans `sous-titres-en-fr/SKILL.md`.
 2. Ajoute l'entrée `## [X.Y.Z] - AAAA-MM-JJ` dans `CHANGELOG.md`.
-3. Commit, puis `git tag vX.Y.Z && git push --follow-tags`.
+3. Commit, puis `git tag -a vX.Y.Z -m vX.Y.Z && git push --follow-tags` (tag annoté avec `-a`, sinon `--follow-tags` ne l'envoie pas).
 
 La GitHub Action vérifie alors que le tag, `SKILL.md` et le changelog concordent. Elle crée ensuite la release, avec le zip joint.
 
