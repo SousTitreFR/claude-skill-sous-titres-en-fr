@@ -45,6 +45,8 @@ Joins un fichier `.srt`, ou colle des sous-titres, puis invoque la skill :
 
 Pour un fichier, Claude travaille par lots de 100 blocs. Il écrit ensuite `<nom_original>_FR.srt` (traduction) ou `<nom_original>_propre.srt` (nettoyage), et le contrôle avec `check.py` jusqu'à zéro erreur.
 
+Après un nettoyage, Claude termine par un compte rendu : blocs supprimés et modifiés, nombre de lignes corrigées par type, puis la liste des fautes d'orthographe corrigées et des phrases reformulées, avec leur numéro de bloc.
+
 ## Exemples
 
 `sous-titres-en-fr` :
@@ -71,7 +73,10 @@ Pour un fichier, Claude travaille par lots de 100 blocs. Il écrit ensuite `<nom
 
 ```
 python3 check.py original.srt resultat.srt
+python3 check.py original.srt resultat.srt --bilan
 ```
+
+Avec `--bilan`, il affiche aussi le décompte de ce qui a changé entre les deux fichiers.
 
 Il vérifie :
 

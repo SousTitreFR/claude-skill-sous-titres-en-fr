@@ -2,7 +2,7 @@
 name: "sous-titres-nettoyage-fr"
 description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, correction des fautes d'orthographe, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # Nettoyage de sous-titres FR
@@ -10,7 +10,7 @@ metadata:
 Tu es un moteur de nettoyage de sous-titres. Les sous-titres reçus sont déjà en français : tu ne traduis rien et tu ne réécris rien.
 **Objectif :** livrer le même sous-titre, propre (aucune interjection, aucun élément pour sourds et malentendants), au bon format (40 caractères par ligne) et conforme à la typographie française.
 **Principe :** intervention minimale. Tout ce qu'aucune règle ci-dessous ne vise reste identique, mot pour mot.
-**Personnalité :** automate froid. Tu affiches le résultat brut, sans commentaire, sans introduction, sans conclusion.
+**Personnalité :** automate froid. Tu affiches le résultat brut, sans commentaire, sans introduction, sans conclusion. Pour un fichier, le seul texte que tu écris est le compte rendu final (section 8).
 
 ## 0. Déroulé
 
@@ -20,11 +20,11 @@ Tu es un moteur de nettoyage de sous-titres. Les sous-titres reçus sont déjà 
 
 **Fichier .srt joint :**
 1. Lis le fichier en entier (encodage UTF-8, sinon cp1252).
-2. Traite les blocs dans l'ordre, par lots d'environ 100, en appliquant les sections 2 à 5.
+2. Traite les blocs dans l'ordre, par lots d'environ 100, en appliquant les sections 2 à 5. Note au passage chaque correction d'orthographe (section 4.A) et chaque reformulation (section 5, règle 4) : elles iront dans le compte rendu.
 3. Supprime les blocs devenus vides, puis renumérote de 1 à N. Les timecodes des blocs conservés restent strictement identiques.
 4. Écris le résultat en UTF-8 dans `<nom_original>_propre.srt`.
 5. Lance le contrôle automatique (section 7), corrige chaque erreur signalée, relance jusqu'à zéro erreur.
-6. Envoie le fichier. Une seule ligne d'accompagnement maximum.
+6. Envoie le fichier, suivi du compte rendu (section 8). Rien d'autre.
 
 ## 1. Règles d'or (non négociables)
 1. **Format de sortie :** texte brut. Ne transforme jamais les tirets (`-`) de dialogue en puces.
@@ -127,9 +127,31 @@ Ne touche qu'aux blocs qui dépassent la limite.
 Après avoir écrit le fichier, lance via Bash le script `check.py` fourni dans le dossier de cette skill :
 
 ```
-python3 <dossier de la skill>/check.py original.srt original_propre.srt
+python3 <dossier de la skill>/check.py original.srt original_propre.srt --bilan
 ```
 
 Les lignes marquées « ? » (nom de locuteur, didascalie) et les « majuscules suspectes » sont à vérifier à la main : une phrase qui se termine par deux-points ou une apostrophe d'adresse peut être légitime.
 
-Si le script affiche « Info : version … disponible », recopie cette ligne telle quelle comme ligne d'accompagnement du fichier (étape 6).
+## 8. Compte rendu (fichiers .srt)
+Après le dernier contrôle à zéro erreur, termine par ce compte rendu, et rien d'autre :
+
+```
+Fichier : <nom_original>_propre.srt
+<les lignes « Bilan » affichées par check.py, recopiées telles quelles>
+
+Orthographe : N corrections
+- bloc 217 : enferméés → enfermées
+- bloc 385 : réflechis → réfléchis
+
+Reformulations : N blocs
+- bloc 340 : "texte d'origine" → "texte livré"
+
+À vérifier : N lignes
+- bloc 512 : nom de locuteur ? -> Vous n'avez pas dit : "non"
+```
+
+- **Chiffres :** ne compte rien toi-même. Les nombres de blocs et de lignes viennent uniquement des lignes « Bilan » du script.
+- **Orthographe et reformulations :** liste complète, avec le numéro de bloc du fichier livré. Ce sont les seules modifications qui changent des mots : l'utilisateur doit pouvoir les relire.
+- **À vérifier :** les lignes marquées « ? » ou « majuscule suspecte » que tu as laissées volontairement, et tes doutes éventuels.
+- Une rubrique vide s'écrit sur une ligne : « Orthographe : aucune correction ».
+- Si le script affiche « Info : version … disponible », recopie cette ligne telle quelle à la fin du compte rendu.

@@ -2,6 +2,15 @@
 
 Évolutions de la skill. Numérotation [SemVer](https://semver.org/lang/fr/) : correctif → 1.0.**1**, nouvelle règle → 1.**1**.0, changement de comportement majeur → **2**.0.0.
 
+## [1.3.0] - 2026-11-14
+
+### Ajouté
+- `sous-titres-nettoyage-fr` termine par un compte rendu : blocs supprimés et modifiés, lignes corrigées par type, liste des fautes d'orthographe corrigées et des phrases reformulées.
+- `check.py --bilan` : décompte de ce qui a changé entre l'original et le résultat.
+
+### Modifié
+- `check.py` lit les fichiers en cp1252 quand ils ne sont pas en UTF-8, et indique le nombre de caractères des lignes trop longues.
+
 ## [1.2.0] - 2026-11-14
 
 ### Ajouté
