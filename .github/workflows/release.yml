@@ -13,21 +13,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Vérifier que le tag correspond à la version de SKILL.md
+      - name: Vérifier les versions, le changelog et check.py
         run: |
-          v=$(grep -oP '^\s*version:\s*"?\K[0-9.]+' sous-titres-en-fr/SKILL.md)
-          if [ "v$v" != "$GITHUB_REF_NAME" ]; then
-            echo "::error::Le tag $GITHUB_REF_NAME ne correspond pas à la version $v de SKILL.md"
-            exit 1
-          fi
+          v="${GITHUB_REF_NAME#v}"
+          for f in */SKILL.md; do
+            sv=$(grep -oP '^\s*version:\s*"?\K[0-9.]+' "$f" | head -1)
+            if [ "$sv" != "$v" ]; then
+              echo "::error::$f est en version $sv, le tag est $GITHUB_REF_NAME"
+              exit 1
+            fi
+          done
           grep -q "^## \[$v\]" CHANGELOG.md || { echo "::error::Aucune entrée [$v] dans CHANGELOG.md"; exit 1; }
+          cmp sous-titres-en-fr/check.py sous-titres-nettoyage-fr/check.py || { echo "::error::Les deux copies de check.py diffèrent"; exit 1; }
 
-      - name: Créer le zip de la skill
-        run: zip -r sous-titres-en-fr.zip sous-titres-en-fr
+      - name: Créer un zip par skill
+        run: |
+          for f in */SKILL.md; do
+            d=$(dirname "$f")
+            zip -r "$d.zip" "$d"
+          done
 
       - name: Publier la release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           notes=$(awk -v v="[${GITHUB_REF_NAME#v}]" '/^## /{p = index($0, v) > 0; next} p' CHANGELOG.md)
-          gh release create "$GITHUB_REF_NAME" sous-titres-en-fr.zip --title "$GITHUB_REF_NAME" --notes "$notes"
+          gh release create "$GITHUB_REF_NAME" *.zip --title "$GITHUB_REF_NAME" --notes "$notes"
