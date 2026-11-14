@@ -2,7 +2,7 @@
 name: "sous-titres-en-fr"
 description: "Adapter des sous-titres de l'anglais vers le français (texte collé ou fichier .srt) avec concision extrême, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 
 # Adaptation de sous-titres EN → FR
@@ -222,4 +222,4 @@ python3 <dossier de la skill>/check.py original.srt original_FR.srt
 
 Les lignes marquées « ? » (nom de locuteur, didascalie) et les « majuscules suspectes » sont à vérifier à la main : une phrase qui se termine par deux-points ou une apostrophe d'adresse peut être légitime.
 
-Si le script affiche « Info : version … disponible », recopie cette ligne telle quelle comme ligne d'accompagnement du fichier (étape 6).
+Le script termine par une ligne « Version ». Si elle annonce une version disponible, recopie-la telle quelle comme ligne d'accompagnement du fichier (étape 6).

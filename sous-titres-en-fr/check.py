@@ -11,18 +11,20 @@ REPO = 'SousTitreFR/claude-skill-sous-titres-en-fr'
 def field(key, text):
     m = re.search(rf'^\s*{key}:\s*"?([\w.-]+)', text, re.M)
     return m.group(1) if m else None
+LATEST = f'https://github.com/{REPO}/releases/latest'
 def check_update():
+    installed = None
     try:
-        local = (Path(__file__).parent / 'SKILL.md').read_text(encoding='utf-8')
-        url = f'https://raw.githubusercontent.com/{REPO}/main/{field("name", local)}/SKILL.md'
-        with urllib.request.urlopen(url, timeout=3) as r:
-            remote = r.read().decode('utf-8')
-        installed, latest = field('version', local), field('version', remote)
+        installed = field('version', (Path(__file__).parent / 'SKILL.md').read_text(encoding='utf-8'))
+        # GitHub redirige vers …/releases/tag/vX.Y.Z : la version se lit dans l'adresse finale
+        with urllib.request.urlopen(urllib.request.Request(LATEST, method='HEAD'), timeout=5) as r:
+            latest = r.url.rsplit('/v', 1)[1]
         newer = tuple(map(int, latest.split('.'))) > tuple(map(int, installed.split('.')))
     except Exception:
-        return  # hors ligne ou SKILL.md absent : l'alerte de mise à jour est facultative
-    if newer:
-        print(f'Info : version {latest} disponible (installée : {installed}) -> https://github.com/{REPO}/releases/latest')
+        print(f'Version : {installed or "inconnue"} (mise à jour non vérifiée : GitHub inaccessible)')
+        return
+    if newer: print(f'Version : {installed} installée, {latest} disponible -> {LATEST}')
+    else: print(f'Version : {installed} (à jour)')
 def blocks(p):
     raw = Path(p).read_bytes()
     try: t = raw.decode('utf-8-sig')

@@ -2,7 +2,7 @@
 name: "sous-titres-nettoyage-fr"
 description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, correction des fautes d'orthographe, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 
 # Nettoyage de sous-titres FR
@@ -148,10 +148,12 @@ Reformulations : N blocs
 
 À vérifier : N lignes
 - bloc 512 : nom de locuteur ? -> Vous n'avez pas dit : "non"
+
+<la ligne « Version » affichée par check.py, recopiée telle quelle>
 ```
 
 - **Chiffres :** ne compte rien toi-même. Les nombres de blocs et de lignes viennent uniquement des lignes « Bilan » du script.
 - **Orthographe et reformulations :** liste complète, avec le numéro de bloc du fichier livré. Ce sont les seules modifications qui changent des mots : l'utilisateur doit pouvoir les relire.
 - **À vérifier :** les lignes marquées « ? » ou « majuscule suspecte » que tu as laissées volontairement, et tes doutes éventuels.
 - Une rubrique vide s'écrit sur une ligne : « Orthographe : aucune correction ».
-- Si le script affiche « Info : version … disponible », recopie cette ligne telle quelle à la fin du compte rendu.
+- **Version :** la dernière ligne du compte rendu est toujours la ligne « Version » du script, qu'elle annonce une mise à jour ou non.

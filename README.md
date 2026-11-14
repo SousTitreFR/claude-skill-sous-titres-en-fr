@@ -92,7 +92,7 @@ Les alertes marquées « ? » sont à vérifier à la main. Le script ne détect
 
 Les deux skills partagent le même numéro de version. Il figure dans l'en-tête de chaque `SKILL.md` (`metadata.version`), et les changements sont listés dans [CHANGELOG.md](CHANGELOG.md).
 
-À chaque contrôle d'un `.srt`, `check.py` compare la version installée à celle du dépôt. Si une version plus récente existe, il affiche `Info : version X disponible`. Sans connexion, il n'affiche rien. Rien n'est mis à jour automatiquement : il faut réimporter le zip, ou recopier le dossier.
+À chaque contrôle d'un `.srt`, `check.py` compare la version installée à la dernière release du dépôt. Il termine toujours par une ligne `Version` : à jour, nouvelle version disponible, ou vérification impossible si GitHub est inaccessible. Rien n'est mis à jour automatiquement : il faut réimporter le zip, ou recopier le dossier.
 
 Pour publier une version :
 

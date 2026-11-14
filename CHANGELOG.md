@@ -2,6 +2,12 @@
 
 Évolutions de la skill. Numérotation [SemVer](https://semver.org/lang/fr/) : correctif → 1.0.**1**, nouvelle règle → 1.**1**.0, changement de comportement majeur → **2**.0.0.
 
+## [1.3.1] - 2026-11-14
+
+### Corrigé
+- L'alerte de mise à jour ne s'affichait pas : `check.py` lisait un `SKILL.md` que GitHub gardait en cache. Il interroge maintenant la dernière release publiée.
+- `check.py` affiche toujours une ligne `Version` (à jour, nouvelle version disponible, ou GitHub inaccessible) au lieu de rester muet. `sous-titres-nettoyage-fr` la recopie à la fin de son compte rendu.
+
 ## [1.3.0] - 2026-11-14
 
 ### Ajouté
