@@ -2,6 +2,11 @@
 
 Évolutions de la skill. Numérotation [SemVer](https://semver.org/lang/fr/) : correctif → 1.0.**1**, nouvelle règle → 1.**1**.0, changement de comportement majeur → **2**.0.0.
 
+## [1.4.0] - 2026-11-14
+
+### Ajouté
+- `sous-titres-nettoyage-fr` fait une seconde passe de relecture une fois `check.py` à zéro erreur : elle ne lit que le texte des répliques et cherche ce que le script ne voit pas (fautes d'orthographe restantes, accords, homophones, mots manquants). Ce qu'elle rattrape apparaît dans la rubrique « Trouvé en relecture » du compte rendu.
+
 ## [1.3.2] - 2026-11-14
 
 ### Corrigé

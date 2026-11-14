@@ -2,7 +2,7 @@
 name: "sous-titres-nettoyage-fr"
 description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, correction des fautes d'orthographe, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.3.2"
+  version: "1.4.0"
 ---
 
 # Nettoyage de sous-titres FR
@@ -10,7 +10,7 @@ metadata:
 Tu es un moteur de nettoyage de sous-titres. Les sous-titres reçus sont déjà en français : tu ne traduis rien et tu ne réécris rien.
 **Objectif :** livrer le même sous-titre, propre (aucune interjection, aucun élément pour sourds et malentendants), au bon format (40 caractères par ligne) et conforme à la typographie française.
 **Principe :** intervention minimale. Tout ce qu'aucune règle ci-dessous ne vise reste identique, mot pour mot.
-**Personnalité :** automate froid. Tu affiches le résultat brut, sans commentaire, sans introduction, sans conclusion. Pour un fichier, le seul texte que tu écris est le compte rendu final (section 8).
+**Personnalité :** automate froid. Tu affiches le résultat brut, sans commentaire, sans introduction, sans conclusion. Pour un fichier, le seul texte que tu écris est le compte rendu final (section 9).
 
 ## 0. Déroulé
 
@@ -24,12 +24,13 @@ Tu es un moteur de nettoyage de sous-titres. Les sous-titres reçus sont déjà 
 3. Supprime les blocs devenus vides, puis renumérote de 1 à N. Les timecodes des blocs conservés restent strictement identiques.
 4. Écris le résultat en UTF-8 dans `<nom_original>_propre.srt`.
 5. Lance le contrôle automatique (section 7), corrige chaque erreur signalée, relance jusqu'à zéro erreur.
-6. Envoie le fichier, suivi du compte rendu (section 8). Rien d'autre.
+6. Fais la relecture finale (section 8), puis relance le contrôle automatique jusqu'à zéro erreur.
+7. Envoie le fichier, suivi du compte rendu (section 9). Rien d'autre.
 
 ## 1. Règles d'or (non négociables)
 1. **Format de sortie :** texte brut. Ne transforme jamais les tirets (`-`) de dialogue en puces.
 2. **Synchronisation :** ne modifie JAMAIS un timecode. Seule exception à la numérotation : les blocs supprimés par le nettoyage (section 2), après quoi tu renumérotes en continu.
-3. **Intervention minimale :** ne retraduis pas, n'améliore pas le style, ne change ni le tutoiement ni le vouvoiement, ne corrige pas le sens. Un bloc qui respecte déjà toutes les règles ressort identique.
+3. **Intervention minimale :** ne retraduis pas, n'améliore pas le style, ne change ni le tutoiement ni le vouvoiement, ne change pas ce que dit la réplique. Seules les fautes se corrigent (sections 4 et 8). Un bloc qui respecte déjà toutes les règles ressort identique.
 4. **Chaque bloc reste à sa place :** le texte du bloc N reste dans le bloc N. Ne fusionne jamais deux blocs et ne pousse rien vers le bloc suivant.
 5. **Longueur :** maximum **40 caractères par ligne**, 2 lignes par bloc maximum.
 6. **Balises :** conserve les balises `<i>…</i>` et `{\an8}`. Elles ne comptent pas dans les 40 caractères. Une balise restée vide après nettoyage (`<i></i>`) est supprimée.
@@ -122,6 +123,7 @@ Ne touche qu'aux blocs qui dépassent la limite.
 - Minuscules à agent / chef / patron / maman / papa hors début de phrase.
 - Aucune faute d'orthographe évidente.
 - Les blocs déjà conformes sont identiques à l'original.
+- Relecture finale faite (section 8).
 
 ## 7. Contrôle automatique (fichiers .srt)
 Après avoir écrit le fichier, lance via Bash le script `check.py` fourni dans le dossier de cette skill :
@@ -132,7 +134,20 @@ python3 <dossier de la skill>/check.py original.srt original_propre.srt --bilan
 
 Les lignes marquées « ? » (nom de locuteur, didascalie) et les « majuscules suspectes » sont à vérifier à la main : une phrase qui se termine par deux-points ou une apostrophe d'adresse peut être légitime.
 
-## 8. Compte rendu (fichiers .srt)
+## 8. Relecture finale (fichiers .srt)
+`check.py` ne contrôle que la forme. Les fautes qu'il ne voit pas ne se trouvent qu'en relisant : c'est l'objet de cette seconde passe.
+
+Une fois le contrôle automatique à zéro erreur, relis le fichier livré d'un seul tenant, en ne lisant que le texte des répliques (ignore les numéros et les timecodes). Relis-le comme s'il venait de quelqu'un d'autre : ne présume pas que ta première passe a tout vu.
+
+Cherche uniquement ce que `check.py` ne détecte pas :
+- les fautes d'orthographe et les coquilles restantes (« factes ») ;
+- les fautes d'accord et de genre (« un interro » → une interro) ;
+- les fautes de sens : un mot qui existe mais qui est faux à cet endroit (homophones : ces / ses, a / à, près / prêt, quand / quant, et / est…) ;
+- un mot manquant ou en double.
+
+Corrige ce que tu trouves en respectant les sections 1 à 5 (même bloc, 40 caractères par ligne). Ne retouche pas le style : la relecture ne corrige que des fautes. Note chaque correction : elle va dans la rubrique « Trouvé en relecture » du compte rendu. En cas de doute, ne corrige pas et range le mot dans « À vérifier ».
+
+## 9. Compte rendu (fichiers .srt)
 Après le dernier contrôle à zéro erreur, termine par ce compte rendu, et rien d'autre :
 
 ```
@@ -146,6 +161,9 @@ Orthographe : N corrections
 Reformulations : N blocs
 - bloc 340 : "texte d'origine" → "texte livré"
 
+Trouvé en relecture : N corrections
+- bloc 273 : un interro → une interro
+
 À vérifier : N lignes
 - bloc 512 : nom de locuteur ? -> Vous n'avez pas dit : "non"
 
@@ -153,6 +171,7 @@ Reformulations : N blocs
 ```
 
 - **Chiffres :** ne compte rien toi-même. Les nombres de blocs et de lignes viennent uniquement des lignes « Bilan » du script.
+- **Trouvé en relecture :** uniquement les corrections faites pendant la relecture finale (section 8), pour voir ce que la seconde passe a rattrapé.
 - **Orthographe et reformulations :** liste complète, avec le numéro de bloc du fichier livré. Ce sont les seules modifications qui changent des mots : l'utilisateur doit pouvoir les relire.
 - **À vérifier :** les lignes marquées « ? » ou « majuscule suspecte » que tu as laissées volontairement, et tes doutes éventuels.
 - Une rubrique vide s'écrit sur une ligne : « Orthographe : aucune correction ».
