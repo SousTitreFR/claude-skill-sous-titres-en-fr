@@ -2,7 +2,7 @@
 name: "sous-titres-nettoyage-fr"
 description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, correction des fautes d'orthographe, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.3.1"
+  version: "1.3.2"
 ---
 
 # Nettoyage de sous-titres FR

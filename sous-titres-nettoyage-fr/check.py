@@ -12,13 +12,22 @@ def field(key, text):
     m = re.search(rf'^\s*{key}:\s*"?([\w.-]+)', text, re.M)
     return m.group(1) if m else None
 LATEST = f'https://github.com/{REPO}/releases/latest'
+def latest_version(name):
+    """Dernière version publiée. La page des releases est à jour tout de suite, mais claude.ai
+    la bloque : on se rabat alors sur le SKILL.md brut, que GitHub sert avec quelques minutes
+    de retard après une publication (cache)."""
+    try:  # GitHub redirige vers …/releases/tag/vX.Y.Z : la version se lit dans l'adresse finale
+        with urllib.request.urlopen(urllib.request.Request(LATEST, method='HEAD'), timeout=5) as r:
+            return r.url.rsplit('/v', 1)[1]
+    except Exception:
+        with urllib.request.urlopen(f'https://raw.githubusercontent.com/{REPO}/main/{name}/SKILL.md', timeout=5) as r:
+            return field('version', r.read().decode('utf-8'))
 def check_update():
     installed = None
     try:
-        installed = field('version', (Path(__file__).parent / 'SKILL.md').read_text(encoding='utf-8'))
-        # GitHub redirige vers …/releases/tag/vX.Y.Z : la version se lit dans l'adresse finale
-        with urllib.request.urlopen(urllib.request.Request(LATEST, method='HEAD'), timeout=5) as r:
-            latest = r.url.rsplit('/v', 1)[1]
+        skill = (Path(__file__).parent / 'SKILL.md').read_text(encoding='utf-8')
+        installed = field('version', skill)
+        latest = latest_version(field('name', skill))
         newer = tuple(map(int, latest.split('.'))) > tuple(map(int, installed.split('.')))
     except Exception:
         print(f'Version : {installed or "inconnue"} (mise à jour non vérifiée : GitHub inaccessible)')

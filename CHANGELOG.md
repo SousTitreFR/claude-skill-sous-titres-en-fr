@@ -2,6 +2,11 @@
 
 Évolutions de la skill. Numérotation [SemVer](https://semver.org/lang/fr/) : correctif → 1.0.**1**, nouvelle règle → 1.**1**.0, changement de comportement majeur → **2**.0.0.
 
+## [1.3.2] - 2026-11-14
+
+### Corrigé
+- Sur claude.ai, la vérification de mise à jour échouait toujours : claude.ai bloque `github.com`. Quand la page des releases est refusée, `check.py` lit maintenant la version dans le `SKILL.md` brut (`raw.githubusercontent.com`), accessible depuis claude.ai. Par ce chemin, une nouvelle version est annoncée quelques minutes après sa publication.
+
 ## [1.3.1] - 2026-11-14
 
 ### Corrigé
