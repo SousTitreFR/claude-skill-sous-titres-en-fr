@@ -14,7 +14,7 @@ Dans les deux cas, le résultat est :
 - **conforme à la typographie française** : guillemets et apostrophes droits, minuscules aux grades ;
 - **synchronisé** : timecodes inchangés, blocs vidés supprimés puis renumérotés.
 
-`sous-titres-nettoyage-fr` ne touche qu'à ce que ces règles visent. Elle ne reformule une phrase que si le bloc ne tient pas en 2 × 40 caractères.
+`sous-titres-nettoyage-fr` corrige aussi les fautes d'orthographe évidentes. Pour le reste, elle ne touche qu'à ce que ces règles visent. Elle ne reformule une phrase que si le bloc ne tient pas en 2 × 40 caractères.
 
 ## Contenu
 

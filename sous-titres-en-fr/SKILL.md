@@ -2,7 +2,7 @@
 name: "sous-titres-en-fr"
 description: "Adapter des sous-titres de l'anglais vers le français (texte collé ou fichier .srt) avec concision extrême, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Adaptation de sous-titres EN → FR

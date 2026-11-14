@@ -2,6 +2,11 @@
 
 Évolutions de la skill. Numérotation [SemVer](https://semver.org/lang/fr/) : correctif → 1.0.**1**, nouvelle règle → 1.**1**.0, changement de comportement majeur → **2**.0.0.
 
+## [1.2.0] - 2026-11-14
+
+### Ajouté
+- `sous-titres-nettoyage-fr` corrige les fautes d'orthographe évidentes (accents, accords, conjugaison, coquilles), sans toucher au registre familier ni aux noms propres.
+
 ## [1.1.0] - 2026-11-14
 
 ### Ajouté

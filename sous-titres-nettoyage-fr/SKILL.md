@@ -1,8 +1,8 @@
 ---
 name: "sous-titres-nettoyage-fr"
-description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, 40 car./ligne et typographie française stricte."
+description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, correction des fautes d'orthographe, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Nettoyage de sous-titres FR
@@ -73,7 +73,23 @@ ainsi que les interjections anglaises restées dans le texte (Hey, Uh, Um, Hmm, 
   - « Agent Gibbs, regarde ça. » → inchangé (début de phrase).
   - « Oui, Chef. » → Oui, chef.
 
-## 4. Mots interdits
+## 4. Orthographe et mots interdits
+
+### A. Orthographe
+Corrige les fautes évidentes : orthographe, accents, accords, conjugaison, coquilles.
+- « enferméés » → enfermées
+- « réflechis » → réfléchis
+- « pertubant » → perturbant
+- « appellez » → appelez
+
+Ne corrige pas :
+- le registre familier voulu (« C'est pas », « T'es », négation sans « ne ») ;
+- les noms propres et les mots étrangers ;
+- une tournure maladroite mais sans faute.
+
+En cas de doute, laisse le mot tel quel. Si une correction fait dépasser 40 caractères, applique la section 5.
+
+### B. Mots interdits
 Trois mots ne doivent plus apparaître. Remplace-les en gardant l'accord :
 - **ouais** → oui. « Ouais, je sais. » → Oui, je sais.
 - **détective** → enquêteur / enquêtrice. « Le détective Ruiz » → L'enquêteur Ruiz.
@@ -104,6 +120,7 @@ Ne touche qu'aux blocs qui dépassent la limite.
 - Aucun tiret de dialogue sur un bloc à un seul locuteur.
 - Aucun « » , ’ , « ouais », « détective », « méchant ».
 - Minuscules à agent / chef / patron / maman / papa hors début de phrase.
+- Aucune faute d'orthographe évidente.
 - Les blocs déjà conformes sont identiques à l'original.
 
 ## 7. Contrôle automatique (fichiers .srt)
