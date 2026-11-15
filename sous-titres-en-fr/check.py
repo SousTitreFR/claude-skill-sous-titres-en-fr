@@ -41,7 +41,9 @@ def blocks(p):
     return [b.split('\n') for b in re.split(r'\n\s*\n', t.replace('\r\n', '\n').strip()) if b.strip()]
 INTERJ = r"(?:Ah|Chut|Eh|Euh|Han-han|Ho|Hum-hum|Hum|Hé|Oh-oh|Oh|Ouf|Ouh|Ouille|Oups|Whoa|Wouah|Wow)"
 TITRES = r'(Agent|Agents|Chef|Patron|Maman|Papa)'
+DEUX_REPLIQUES = r'^-.*[.!?…"]\s+-\s*\S'  # « - Oui. - Je suis là. » sur une seule ligne
 CHECKS = [  # (catégorie, test sur une ligne sans balises)
+    ('deux répliques sur une ligne', lambda l: re.match(DEUX_REPLIQUES, l)),
     ('plus de 40 car.', lambda l: len(l) > 40),
     ('typo interdite', lambda l: re.search(r'[«»’]', l)),
     ('mot interdit', lambda l: re.search(r'\b(ouais|détective|méchant)\b', l, re.I)),
@@ -77,7 +79,7 @@ for n, b in enumerate(B, 1):
     lines = plain(b)
     if not any(lines): err.append(f'Bloc {num} : bloc vide (à supprimer)')
     if len(lines) > 2: err.append(f'Bloc {num} : {len(lines)} lignes')
-    if len(lines) == 1 and lines[0].startswith('-'): err.append(f'Bloc {num} : tiret sur un seul locuteur -> {lines[0]}')
+    if len(lines) == 1 and lines[0].startswith('-') and not re.match(DEUX_REPLIQUES, lines[0]): err.append(f'Bloc {num} : tiret sur un seul locuteur -> {lines[0]}')
     for cat, l in issues(b):
         err.append(f'Bloc {num} : {cat} -> {l}' + (f' ({len(l)} car.)' if len(l) > 40 else ''))
 print(f'Info : {len(A)} blocs dans l\'original, {len(B)} dans le résultat ({len(A) - len(B)} supprimés au nettoyage)')

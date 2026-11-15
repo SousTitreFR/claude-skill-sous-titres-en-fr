@@ -2,7 +2,7 @@
 name: "sous-titres-nettoyage-fr"
 description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, correction des fautes d'orthographe, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Nettoyage de sous-titres FR
@@ -97,7 +97,7 @@ Trois mots ne doivent plus apparaître. Remplace-les en gardant l'accord :
 - **méchant** → criminel ou suspect quand il désigne la personne recherchée ; sinon un synonyme de même sens (cruel, mauvais).
 
 ## 5. Longueur et découpage
-Ne touche qu'aux blocs qui dépassent la limite.
+Ne touche qu'aux blocs qui dépassent la limite, ou qui ont deux répliques sur une même ligne.
 
 1. **Ligne de plus de 40 caractères, ou bloc de plus de 2 lignes :** redécoupe le texte du bloc sur 2 lignes, sans changer un mot.
    - « Je ne pense vraiment pas que ce soit une bonne idée. » → Je ne pense vraiment pas / que ce soit une bonne idée.
@@ -107,7 +107,9 @@ Ne touche qu'aux blocs qui dépassent la limite.
    - Auxiliaire + participe (a disparu)
    - Préposition + complément (à Paris)
    - Verbe + COD court (aime sa famille)
-3. **Dialogue à deux locuteurs :** chaque réplique garde sa ligne et son tiret. Si une réplique dépasse 40 caractères, c'est elle seule que tu raccourcis (règle 4).
+3. **Dialogue à deux locuteurs :** une ligne par réplique, chacune avec son tiret. Deux répliques sur une même ligne se séparent sur deux lignes, sans changer un mot.
+   - « - Oui. - Je suis soulagée que tu sois là. » → - Oui. / - Je suis soulagée que tu sois là.
+   Si une réplique dépasse 40 caractères, c'est elle seule que tu raccourcis (règle 4).
 4. **Le texte ne tient pas en 2 × 40 caractères :** alors seulement, raccourcis, dans cet ordre :
    - retire les mots vides (« Tu sais », « Je veux dire », « Écoute », « Bon », « Eh bien ») ;
    - puis reformule plus court, sans perdre d'information : chaque proposition, la négation, la cause, le destinataire et les noms propres restent.
@@ -118,7 +120,7 @@ Ne touche qu'aux blocs qui dépassent la limite.
 - Timecodes identiques à l'original, numérotation continue de 1 à N.
 - Aucune ligne > 40 caractères, aucun bloc > 2 lignes, aucun bloc vide.
 - Aucune interjection de la liste, aucun nom de locuteur, aucune didascalie, aucun bloc de notes de musique seules.
-- Aucun tiret de dialogue sur un bloc à un seul locuteur.
+- Aucun tiret de dialogue sur un bloc à un seul locuteur, jamais deux répliques sur une même ligne.
 - Aucun « » , ’ , « ouais », « détective », « méchant ».
 - Minuscules à agent / chef / patron / maman / papa hors début de phrase.
 - Aucune faute d'orthographe évidente.

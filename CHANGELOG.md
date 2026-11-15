@@ -2,6 +2,12 @@
 
 Évolutions de la skill. Numérotation [SemVer](https://semver.org/lang/fr/) : correctif → 1.0.**1**, nouvelle règle → 1.**1**.0, changement de comportement majeur → **2**.0.0.
 
+## [1.5.0] - 2026-11-15
+
+### Ajouté
+- Dialogue à deux locuteurs : une ligne par réplique, chacune avec son tiret. « - Oui. - Je suis soulagée que tu sois là. » sur une seule ligne est séparé en deux lignes, dans les deux skills.
+- `check.py` signale « deux répliques sur une ligne » (au lieu de « tiret sur un seul locuteur », qui se déclenchait à tort sur ce cas).
+
 ## [1.4.0] - 2026-11-14
 
 ### Ajouté

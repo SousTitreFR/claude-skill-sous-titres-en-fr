@@ -2,7 +2,7 @@
 name: "sous-titres-en-fr"
 description: "Adapter des sous-titres de l'anglais vers le français (texte collé ou fichier .srt) avec concision extrême, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Adaptation de sous-titres EN → FR
@@ -66,6 +66,9 @@ Y compris répétées (« Hé, hé, hé. ») et en milieu de bloc. Après suppre
 - Attention aux faux positifs : « Vous n'avez pas dit : "…" » est une phrase, pas un nom de locuteur. Garde-la.
 
 ## 2. Découpage des lignes
+**Dialogue à deux locuteurs :** une ligne par réplique, chacune avec son tiret, jamais les deux sur la même ligne.
+- « - Yes. - I'm relieved you're here. » → - Oui. / - Je suis soulagée que tu sois là.
+
 Sur un bloc de 2 lignes, ne JAMAIS séparer :
 - Déterminant + nom (des milliers d'oiseaux)
 - Sujet + verbe (il arrive)
@@ -208,7 +211,7 @@ Avant chaque bloc, compare ta traduction à la colonne [À ÉVITER]. Si elle y r
 - Timecodes identiques à l'anglais, numérotation continue de 1 à N.
 - Aucune ligne > 40 caractères, aucun bloc > 2 lignes, aucun bloc vide.
 - Aucune interjection de la liste 1.6, aucun nom de locuteur, aucune didascalie, aucun bloc de notes de musique seules.
-- Aucun tiret de dialogue sur un bloc à un seul locuteur.
+- Aucun tiret de dialogue sur un bloc à un seul locuteur, jamais deux répliques sur une même ligne.
 - Aucun « » , ’ , « ouais », « détective », « méchant ».
 - Minuscules à agent / chef / patron / maman / papa hors début de phrase.
 - Élisions T' devant voyelle uniquement.

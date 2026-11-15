@@ -12,6 +12,7 @@ Dans les deux cas, le résultat est :
 - **lisible** : 40 caractères par ligne et 2 lignes par bloc au maximum, sans couper un groupe de mots ;
 - **propre** : aucune interjection (Oh, Hé, Euh…), aucun nom de locuteur, aucune didascalie ni note de musique ;
 - **conforme à la typographie française** : guillemets et apostrophes droits, minuscules aux grades ;
+- **une réplique par ligne** : dans un dialogue, chaque locuteur a sa ligne et son tiret ;
 - **synchronisé** : timecodes inchangés, blocs vidés supprimés puis renumérotés.
 
 `sous-titres-nettoyage-fr` corrige aussi les fautes d'orthographe évidentes. Pour le reste, elle ne touche qu'à ce que ces règles visent. Elle ne reformule une phrase que si le bloc ne tient pas en 2 × 40 caractères.
@@ -84,7 +85,7 @@ Il vérifie :
 
 - la numérotation et les timecodes ;
 - la longueur des lignes et le nombre de lignes par bloc ;
-- les blocs vides et les tirets sur un seul locuteur ;
+- les blocs vides, les tirets sur un seul locuteur et les deux répliques sur une même ligne ;
 - les interjections, la typographie interdite et les mots interdits ;
 - les noms de locuteurs, les didascalies et les majuscules suspectes.
 
