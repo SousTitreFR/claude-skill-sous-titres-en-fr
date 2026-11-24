@@ -10,7 +10,7 @@ Deux skills pour Claude, à partir d'un texte collé ou d'un fichier `.srt` :
 Dans les deux cas, le résultat est :
 
 - **lisible** : 40 caractères par ligne et 2 lignes par bloc au maximum, sans couper un groupe de mots ;
-- **propre** : aucune interjection (Oh, Hé, Euh…), aucun nom de locuteur, aucune didascalie ni note de musique ;
+- **propre** : aucune interjection (Oh, Hé, Euh…), aucun nom de locuteur, aucune didascalie ni note de musique, aucune publicité (type OpenSubtitles) ; les crédits du sous-titre sont conservés ;
 - **conforme à la typographie française** : guillemets et apostrophes droits, minuscules aux grades ;
 - **une réplique par ligne** : dans un dialogue, chaque locuteur a sa ligne et son tiret ;
 - **synchronisé** : timecodes inchangés, blocs vidés supprimés puis renumérotés.
@@ -87,7 +87,9 @@ Il vérifie :
 - la longueur des lignes et le nombre de lignes par bloc ;
 - les blocs vides, les tirets sur un seul locuteur et les deux répliques sur une même ligne ;
 - les interjections, la typographie interdite et les mots interdits ;
-- les noms de locuteurs, les didascalies et les majuscules suspectes.
+- les noms de locuteurs, les didascalies et les majuscules suspectes ;
+- les crédits du sous-titre (auteur, synchronisation, adresse de site) supprimés ou modifiés ;
+- les publicités restantes (type OpenSubtitles).
 
 Les alertes marquées « ? » sont à vérifier à la main. Le script ne détecte pas les pertes de sens : c'est le rôle de la relecture prévue dans `sous-titres-en-fr`.
 

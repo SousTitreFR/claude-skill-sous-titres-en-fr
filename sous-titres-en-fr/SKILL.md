@@ -2,7 +2,7 @@
 name: "sous-titres-en-fr"
 description: "Adapter des sous-titres de l'anglais vers le français (texte collé ou fichier .srt) avec concision extrême, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
 ---
 
 # Adaptation de sous-titres EN → FR
@@ -28,6 +28,9 @@ Tu es un moteur de sous-titrage expert. Mission : adapter de l'anglais vers le f
 1. **Format de sortie :** texte brut. Ne transforme jamais les tirets (`-`) de dialogue en puces.
 2. **Synchronisation :** ne modifie JAMAIS un timecode. Seule exception à la numérotation : les blocs supprimés par le nettoyage (section 1.6), après quoi tu renumérotes en continu.
 3. **Longueur :** maximum **40 caractères par ligne**, 2 lignes par bloc maximum.
+4. **Crédits :** les blocs de crédits du sous-titre (auteur, synchronisation, correction, équipe, adresse de site) restent tels quels, mot pour mot : ni traduits, ni condensés, ni supprimés. Ce ne sont ni des répliques à adapter ni des éléments pour malentendants. Seule retouche permise : redécouper une ligne de plus de 40 caractères.
+   - « Synced & corrected by -robtor- / www.addic7ed.com » → Synced & corrected by -robtor- / www.addic7ed.com
+   - Une publicité n'est pas un crédit : elle est supprimée (section 1.6, C).
 
 ## 1.5 Sécurité structurelle
 1. **Mapping 1:1 :** le texte du bloc N anglais va dans le bloc N français (ou disparaît si le bloc est vidé par le nettoyage).
@@ -64,6 +67,14 @@ Y compris répétées (« Hé, hé, hé. ») et en milieu de bloc. Après suppre
 - **Didascalies** entre crochets ou parenthèses : [laughs], (sighs), [phone rings]… → supprimées.
 - **Notes de musique seules** (`♪`, `<i>♪ ♪</i>`, `#`) → bloc supprimé.
 - Attention aux faux positifs : « Vous n'avez pas dit : "…" » est une phrase, pas un nom de locuteur. Garde-la.
+
+### C. Publicités : à supprimer
+Un bloc qui fait la promotion d'un site, d'un service ou d'un produit, ou qui demande de noter, soutenir ou télécharger, est une publicité insérée dans le fichier : bloc supprimé. Il ne dit pas qui a fait le sous-titre.
+- « Advertise your product or brand here / contact www.OpenSubtitles.org today » → bloc supprimé.
+- « Support us and become VIP member » → bloc supprimé.
+- « Please rate this subtitle at… » → bloc supprimé.
+- **Ne confonds pas avec un crédit** (règle d'or 4) : « Synced & corrected by -robtor- / www.addic7ed.com » dit qui a fait le sous-titre, il reste.
+- **Bloc mixte** (une ligne de crédit, une ligne de publicité) : garde la ligne de crédit, supprime la ligne de publicité.
 
 ## 2. Découpage des lignes
 **Dialogue à deux locuteurs :** une ligne par réplique, chacune avec son tiret, jamais les deux sur la même ligne.
@@ -209,8 +220,9 @@ Avant chaque bloc, compare ta traduction à la colonne [À ÉVITER]. Si elle y r
 ## 8. Checklist avant de livrer
 - Relecture de sens faite sur tous les lots : aucune proposition, négation, cause ou destinataire perdu (section 3.6).
 - Timecodes identiques à l'anglais, numérotation continue de 1 à N.
+- Blocs de crédits présents et identiques à l'original.
 - Aucune ligne > 40 caractères, aucun bloc > 2 lignes, aucun bloc vide.
-- Aucune interjection de la liste 1.6, aucun nom de locuteur, aucune didascalie, aucun bloc de notes de musique seules.
+- Aucune interjection de la liste 1.6, aucun nom de locuteur, aucune didascalie, aucun bloc de notes de musique seules, aucune publicité.
 - Aucun tiret de dialogue sur un bloc à un seul locuteur, jamais deux répliques sur une même ligne.
 - Aucun « » , ’ , « ouais », « détective », « méchant ».
 - Minuscules à agent / chef / patron / maman / papa hors début de phrase.
@@ -224,5 +236,9 @@ python3 <dossier de la skill>/check.py original.srt original_FR.srt
 ```
 
 Les lignes marquées « ? » (nom de locuteur, didascalie) et les « majuscules suspectes » sont à vérifier à la main : une phrase qui se termine par deux-points ou une apostrophe d'adresse peut être légitime.
+
+« Crédit supprimé ou modifié ? » : si le bloc cité est bien un crédit, remets-le tel quel à son timecode (règle d'or 4). Si c'est une réplique qui cite un site ou contient « by », laisse ta traduction.
+
+« Publicité ? » : si la ligne citée est bien une publicité, supprime-la (section 1.6, C). Si c'est une réplique, laisse-la.
 
 Le script termine par une ligne « Version ». Si elle annonce une version disponible, recopie-la telle quelle comme ligne d'accompagnement du fichier (étape 6).

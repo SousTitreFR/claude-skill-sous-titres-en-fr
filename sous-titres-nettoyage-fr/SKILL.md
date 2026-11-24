@@ -2,7 +2,7 @@
 name: "sous-titres-nettoyage-fr"
 description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, correction des fautes d'orthographe, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
 ---
 
 # Nettoyage de sous-titres FR
@@ -33,7 +33,10 @@ Tu es un moteur de nettoyage de sous-titres. Les sous-titres reçus sont déjà 
 3. **Intervention minimale :** ne retraduis pas, n'améliore pas le style, ne change ni le tutoiement ni le vouvoiement, ne change pas ce que dit la réplique. Seules les fautes se corrigent (sections 4 et 8). Un bloc qui respecte déjà toutes les règles ressort identique.
 4. **Chaque bloc reste à sa place :** le texte du bloc N reste dans le bloc N. Ne fusionne jamais deux blocs et ne pousse rien vers le bloc suivant.
 5. **Longueur :** maximum **40 caractères par ligne**, 2 lignes par bloc maximum.
-6. **Balises :** conserve les balises `<i>…</i>` et `{\an8}`. Elles ne comptent pas dans les 40 caractères. Une balise restée vide après nettoyage (`<i></i>`) est supprimée.
+6. **Crédits :** les blocs de crédits du sous-titre (auteur, synchronisation, correction, équipe, adresse de site) restent tels quels, mot pour mot, jamais supprimés. Seule retouche permise : redécouper une ligne de plus de 40 caractères. Si `check.py` signale « crédit supprimé ou modifié ? » sur un vrai crédit, remets-le tel quel à son timecode.
+   - « Synced & corrected by -robtor- / www.addic7ed.com » → inchangé.
+   - Une publicité n'est pas un crédit : elle est supprimée (section 2, C).
+7. **Balises :** conserve les balises `<i>…</i>` et `{\an8}`. Elles ne comptent pas dans les 40 caractères. Une balise restée vide après nettoyage (`<i></i>`) est supprimée.
 
 ## 2. Nettoyage (interjections et malentendants)
 Le fichier livré ne doit plus jamais passer par un outil de nettoyage.
@@ -65,6 +68,15 @@ ainsi que les interjections anglaises restées dans le texte (Hey, Uh, Um, Hmm, 
 - **Didascalies** entre crochets ou parenthèses : [rires], (soupire), [le téléphone sonne], [laughs]… → supprimées.
 - **Notes de musique seules** (`♪`, `<i>♪ ♪</i>`, `#`) → bloc supprimé.
 - Attention aux faux positifs : « Vous n'avez pas dit : "…" » est une phrase, pas un nom de locuteur. Garde-la.
+
+### C. Publicités : à supprimer
+Un bloc qui fait la promotion d'un site, d'un service ou d'un produit, ou qui demande de noter, soutenir ou télécharger, est une publicité insérée dans le fichier : bloc supprimé. Il ne dit pas qui a fait le sous-titre.
+- « Advertise your product or brand here / contact www.OpenSubtitles.org today » → bloc supprimé.
+- « Support us and become VIP member » → bloc supprimé.
+- « Please rate this subtitle at… » → bloc supprimé.
+- **Ne confonds pas avec un crédit** (règle d'or 6) : « Synced & corrected by -robtor- / www.addic7ed.com » dit qui a fait le sous-titre, il reste.
+- **Bloc mixte** (une ligne de crédit, une ligne de publicité) : garde la ligne de crédit, supprime la ligne de publicité.
+- Si `check.py` signale « publicité ? » sur une vraie réplique, laisse-la.
 
 ## 3. Typographie et casse
 - **Guillemets :** droits (`"`) uniquement. Remplace `« »` et `“ ”`.
@@ -118,8 +130,9 @@ Ne touche qu'aux blocs qui dépassent la limite, ou qui ont deux répliques sur 
 
 ## 6. Checklist avant de livrer
 - Timecodes identiques à l'original, numérotation continue de 1 à N.
+- Blocs de crédits présents et identiques à l'original.
 - Aucune ligne > 40 caractères, aucun bloc > 2 lignes, aucun bloc vide.
-- Aucune interjection de la liste, aucun nom de locuteur, aucune didascalie, aucun bloc de notes de musique seules.
+- Aucune interjection de la liste, aucun nom de locuteur, aucune didascalie, aucun bloc de notes de musique seules, aucune publicité.
 - Aucun tiret de dialogue sur un bloc à un seul locuteur, jamais deux répliques sur une même ligne.
 - Aucun « » , ’ , « ouais », « détective », « méchant ».
 - Minuscules à agent / chef / patron / maman / papa hors début de phrase.

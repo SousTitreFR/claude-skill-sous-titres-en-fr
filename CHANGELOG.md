@@ -2,6 +2,15 @@
 
 Évolutions de la skill. Numérotation [SemVer](https://semver.org/lang/fr/) : correctif → 1.0.**1**, nouvelle règle → 1.**1**.0, changement de comportement majeur → **2**.0.0.
 
+## [1.6.0] - 2026-11-24
+
+### Corrigé
+- `sous-titres-en-fr` supprimait les crédits du sous-titre (`Synced & corrected by -robtor-`, `www.addic7ed.com`). Les blocs de crédits (auteur, synchronisation, correction, équipe, adresse de site) sont maintenant conservés tels quels, sans traduction, dans les deux skills.
+
+### Ajouté
+- Les publicités insérées dans le fichier (type OpenSubtitles : « Advertise your product or brand here », « Support us and become VIP member », « Please rate this subtitle ») sont supprimées, dans les deux skills. `check.py` signale « publicité ? » s'il en reste une.
+- `check.py` signale « crédit supprimé ou modifié ? » quand un bloc de crédits de l'original manque dans le résultat ou n'y est plus identique.
+
 ## [1.5.0] - 2026-11-15
 
 ### Ajouté
