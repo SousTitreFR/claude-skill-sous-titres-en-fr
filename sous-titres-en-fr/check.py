@@ -1,8 +1,9 @@
-"""Contrôle automatique d'un .srt produit par les skills sous-titres-en-fr
-et sous-titres-nettoyage-fr. Le même fichier est copié dans les deux dossiers.
+"""Contrôle automatique d'un .srt produit par les skills sous-titres-en-fr,
+sous-titres-nettoyage-fr et sous-titres-nettoyage-en. Le même fichier est copié dans les trois dossiers.
 
-Usage : python3 check.py original.srt resultat.srt [--bilan]
+Usage : python3 check.py original.srt resultat.srt [--bilan] [--en]
   --bilan : affiche aussi le décompte de ce qui a changé entre les deux fichiers.
+  --en    : le résultat est en anglais (interjections anglaises, pas de règles propres au français).
 """
 import re, sys, urllib.request
 from collections import Counter
@@ -39,13 +40,16 @@ def blocks(p):
     try: t = raw.decode('utf-8-sig')
     except UnicodeDecodeError: t = raw.decode('cp1252', errors='replace')
     return [b.split('\n') for b in re.split(r'\n\s*\n', t.replace('\r\n', '\n').strip()) if b.strip()]
-INTERJ = r"(?:Ah|Chut|Eh|Euh|Han-han|Ho|Hum-hum|Hum|Hé|Oh-oh|Oh|Ouf|Ouh|Ouille|Oups|Whoa|Wouah|Wow)"
+EN = '--en' in sys.argv  # résultat en anglais (sous-titres-nettoyage-en)
+INTERJ_EN = r"(?:U+h+-(?:oh|huh|uh)|(?:M+|H|U)m+-hm+|Nuh-uh|Oh-oh|Ahem|Oops|Whoops|Phew|Whew|Whoa|Wow|Ugh+|Huh|Shh+|Ooh+|Aw+|Ow+|Er+m?|U+h*m+|U+h+|H+m+|M+m+|O+h+|A+h+|Eh)"
+INTERJ_FR = r"(?:Ah|Chut|Eh|Euh|Han-han|Ho|Hum-hum|Hum|Hé|Oh-oh|Oh|Ouf|Ouh|Ouille|Oups|Whoa|Wouah|Wow)"
+INTERJ = INTERJ_EN if EN else INTERJ_FR
 TITRES = r'(Agent|Agents|Chef|Patron|Maman|Papa)'
 DEUX_REPLIQUES = r'^-.*[.!?…"]\s+-\s*\S'  # « - Oui. - Je suis là. » sur une seule ligne
 CHECKS = [  # (catégorie, test sur une ligne sans balises)
     ('deux répliques sur une ligne', lambda l: re.match(DEUX_REPLIQUES, l)),
     ('plus de 40 car.', lambda l: len(l) > 40),
-    ('typo interdite', lambda l: re.search(r'[«»’]', l)),
+    ('typo interdite', lambda l: re.search(r'[«»“”‘’]', l)),
     ('mot interdit', lambda l: re.search(r'\b(ouais|détective|méchant)\b', l, re.I)),
     ('interjection', lambda l: re.search(rf"(?<![\w-]){INTERJ}(?![\w-])\s*[,!.?…]|^-?\s*{INTERJ}\s*$", l)),
     ('notes de musique seules', lambda l: l and re.fullmatch(r'-?\s*[♪#\s]*', l)),
@@ -54,6 +58,7 @@ CHECKS = [  # (catégorie, test sur une ligne sans balises)
     ('didascalie ?', lambda l: re.search(r'[\[\]]|\([^)]*\)', l)),
     ('majuscule suspecte', lambda l: re.search(rf"(?<![.!?]\s)(?<!^)\b{TITRES}\b", l) and not re.match(rf'^-?\s*{TITRES}\b', l)),
 ]
+if EN: CHECKS = [c for c in CHECKS if c[0] not in ('mot interdit', 'majuscule suspecte')]  # règles propres au français
 # ponytail: heuristique naïve (adresse de site, ou « synced / subtitles / traduit… by / par »),
 # d'où le « ? » dans l'alerte ; à resserrer si elle se déclenche sur de vraies répliques.
 CREDIT = r"www\.|https?://|\w\.(?:com|org|net|fr|tv)\b|\b(?:(?:re)?sync(?:ed|hro\w*)?|correct(?:ed|ions?)|caption\w*|subtitl\w*|subs|sous-titr\w*|tradu\w*|translat\w*|transcri\w*)\b.*\b(?:by|par)\b"

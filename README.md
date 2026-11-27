@@ -1,21 +1,22 @@
 # Skills de sous-titres en français pour Claude
 
-Deux skills pour Claude, à partir d'un texte collé ou d'un fichier `.srt` :
+Trois skills pour Claude, à partir d'un texte collé ou d'un fichier `.srt` :
 
 | Skill | Tu lui donnes | Elle fait |
 | :--- | :--- | :--- |
 | `sous-titres-en-fr` | des sous-titres en anglais | les adapte en français, concis et sans perte de sens, et livre un fichier propre |
 | `sous-titres-nettoyage-fr` | des sous-titres déjà en français | les nettoie sans les retraduire |
+| `sous-titres-nettoyage-en` | des sous-titres en anglais (VO) | les nettoie sans les traduire : ils restent en anglais |
 
-Dans les deux cas, le résultat est :
+Dans tous les cas, le résultat est :
 
 - **lisible** : 40 caractères par ligne et 2 lignes par bloc au maximum, sans couper un groupe de mots ;
 - **propre** : aucune interjection (Oh, Hé, Euh…), aucun nom de locuteur, aucune didascalie ni note de musique, aucune publicité (type OpenSubtitles) ; les crédits du sous-titre sont conservés ;
-- **conforme à la typographie française** : guillemets et apostrophes droits, minuscules aux grades ;
+- **à la typographie attendue** : guillemets et apostrophes droits, et minuscules aux grades en français ;
 - **une réplique par ligne** : dans un dialogue, chaque locuteur a sa ligne et son tiret ;
 - **synchronisé** : timecodes inchangés, blocs vidés supprimés puis renumérotés.
 
-`sous-titres-nettoyage-fr` corrige aussi les fautes d'orthographe évidentes. Pour le reste, elle ne touche qu'à ce que ces règles visent. Elle ne reformule une phrase que si le bloc ne tient pas en 2 × 40 caractères.
+Les deux skills de nettoyage corrigent aussi les fautes d'orthographe évidentes (et, en anglais, les erreurs d'OCR comme `l'm` pour `I'm`). Pour le reste, elles ne touchent qu'à ce que ces règles visent. Elles ne reformulent une phrase que si le bloc ne tient pas en 2 × 40 caractères.
 
 ## Contenu
 
@@ -26,13 +27,16 @@ sous-titres-en-fr/
 sous-titres-nettoyage-fr/
 ├── SKILL.md
 └── check.py   ← le même script, copié pour que chaque dossier soit autonome
+sous-titres-nettoyage-en/
+├── SKILL.md
+└── check.py   ← idem
 ```
 
 ## Installation
 
 Chaque skill s'installe séparément.
 
-- **Claude (claude.ai, application)** : télécharge `sous-titres-en-fr.zip` ou `sous-titres-nettoyage-fr.zip` depuis la [dernière release](https://github.com/SousTitreFR/claude-skill-sous-titres-en-fr/releases/latest) et importe-le dans les paramètres des skills.
+- **Claude (claude.ai, application)** : télécharge `sous-titres-en-fr.zip`, `sous-titres-nettoyage-fr.zip` ou `sous-titres-nettoyage-en.zip` depuis la [dernière release](https://github.com/SousTitreFR/claude-skill-sous-titres-en-fr/releases/latest) et importe-le dans les paramètres des skills.
 - **Claude Code** : copie le dossier de la skill dans `~/.claude/skills/`.
 
 ## Utilisation
@@ -42,6 +46,7 @@ Joins un fichier `.srt`, ou colle des sous-titres, puis invoque la skill :
 ```
 /sous-titres-en-fr
 /sous-titres-nettoyage-fr
+/sous-titres-nettoyage-en
 ```
 
 Pour un fichier, Claude travaille par lots de 100 blocs. Il écrit ensuite `<nom_original>_FR.srt` (traduction) ou `<nom_original>_propre.srt` (nettoyage), et le contrôle avec `check.py` jusqu'à zéro erreur.
@@ -70,6 +75,15 @@ Après un nettoyage, Claude termine par un compte rendu : blocs supprimés et mo
 | [rires] Ouais, je sais. | Oui, je sais. |
 | J'ai dit à l'Agent Gibbs « de regarder ». | J'ai dit à l'agent Gibbs "de regarder". |
 
+`sous-titres-nettoyage-en` :
+
+| Avant | Après |
+| :--- | :--- |
+| Oh, my darling. | My darling. |
+| BOTH: No. | No. |
+| [laughs] Uh, l'm fine. | I'm fine. |
+| Hey, Curry. | Hey, Curry. |
+
 ## Contrôle automatique
 
 `check.py` peut aussi s'utiliser seul, avec Python 3 et sans dépendance :
@@ -77,9 +91,10 @@ Après un nettoyage, Claude termine par un compte rendu : blocs supprimés et mo
 ```
 python3 check.py original.srt resultat.srt
 python3 check.py original.srt resultat.srt --bilan
+python3 check.py original.srt resultat.srt --bilan --en
 ```
 
-Avec `--bilan`, il affiche aussi le décompte de ce qui a changé entre les deux fichiers.
+Avec `--bilan`, il affiche aussi le décompte de ce qui a changé entre les deux fichiers. Avec `--en`, il contrôle un résultat en anglais : interjections anglaises, sans les mots interdits ni les majuscules suspectes, propres au français.
 
 Il vérifie :
 
@@ -95,18 +110,18 @@ Les alertes marquées « ? » sont à vérifier à la main. Le script ne détect
 
 ## Versions et mises à jour
 
-Les deux skills partagent le même numéro de version. Il figure dans l'en-tête de chaque `SKILL.md` (`metadata.version`), et les changements sont listés dans [CHANGELOG.md](CHANGELOG.md).
+Les trois skills partagent le même numéro de version. Il figure dans l'en-tête de chaque `SKILL.md` (`metadata.version`), et les changements sont listés dans [CHANGELOG.md](CHANGELOG.md).
 
 À chaque contrôle d'un `.srt`, `check.py` compare la version installée à la dernière release du dépôt. Il termine toujours par une ligne `Version` : à jour, nouvelle version disponible, ou vérification impossible si GitHub est inaccessible. Rien n'est mis à jour automatiquement : il faut réimporter le zip, ou recopier le dossier.
 
 Pour publier une version :
 
-1. Change `version` dans les deux `SKILL.md`.
-2. Si `check.py` a changé, recopie-le dans l'autre dossier : les deux copies doivent être identiques.
+1. Change `version` dans les trois `SKILL.md`.
+2. Si `check.py` a changé, recopie-le dans les deux autres dossiers : les trois copies doivent être identiques.
 3. Ajoute l'entrée `## [X.Y.Z] - AAAA-MM-JJ` dans `CHANGELOG.md`.
 4. Commit, puis `git tag -a vX.Y.Z -m vX.Y.Z && git push --follow-tags` (tag annoté avec `-a`, sinon `--follow-tags` ne l'envoie pas).
 
-La GitHub Action vérifie alors que le tag, les deux `SKILL.md`, le changelog et les deux `check.py` concordent. Elle crée ensuite la release, avec un zip par skill.
+La GitHub Action vérifie alors que le tag, les trois `SKILL.md`, le changelog et les trois `check.py` concordent. Elle crée ensuite la release, avec un zip par skill.
 
 ## Licence
 

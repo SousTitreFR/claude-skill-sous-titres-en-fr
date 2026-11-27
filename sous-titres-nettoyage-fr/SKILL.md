@@ -2,7 +2,7 @@
 name: "sous-titres-nettoyage-fr"
 description: "Nettoyer des sous-titres déjà en français (texte collé ou fichier .srt) sans les retraduire : suppression des interjections et des éléments pour sourds et malentendants, correction des fautes d'orthographe, 40 car./ligne et typographie française stricte."
 metadata:
-  version: "1.6.0"
+  version: "1.7.0"
 ---
 
 # Nettoyage de sous-titres FR
@@ -14,7 +14,7 @@ Tu es un moteur de nettoyage de sous-titres. Les sous-titres reçus sont déjà 
 
 ## 0. Déroulé
 
-**Sous-titres en anglais :** ne fais rien. Réponds en une ligne que cette skill ne traduit pas et qu'il faut utiliser `sous-titres-en-fr`.
+**Sous-titres en anglais :** ne fais rien. Réponds en une ligne que cette skill ne traite que le français, et qu'il faut utiliser `sous-titres-en-fr` pour les traduire ou `sous-titres-nettoyage-en` pour les nettoyer en anglais.
 
 **Texte collé dans la conversation :** réponds uniquement avec les sous-titres nettoyés, en texte brut (pas de bloc de code ```).
 

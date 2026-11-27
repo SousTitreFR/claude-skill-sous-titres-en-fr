@@ -2,6 +2,15 @@
 
 Évolutions de la skill. Numérotation [SemVer](https://semver.org/lang/fr/) : correctif → 1.0.**1**, nouvelle règle → 1.**1**.0, changement de comportement majeur → **2**.0.0.
 
+## [1.7.0] - 2026-11-27
+
+### Ajouté
+- Nouvelle skill `sous-titres-nettoyage-en` : nettoie des sous-titres en anglais (VO) sans les traduire. Mêmes règles que `sous-titres-nettoyage-fr` (interjections, éléments pour sourds et malentendants, publicités, crédits conservés, 40 caractères par ligne, relecture finale, compte rendu), adaptées à l'anglais : interjections anglaises, erreurs d'OCR (`l'm` → `I'm`), pas de mots interdits ni de minuscules aux grades.
+- `check.py` accepte l'option `--en` pour contrôler un résultat en anglais.
+
+### Modifié
+- `check.py` signale aussi les guillemets et apostrophes courbes `“ ” ‘` comme « typo interdite » (jusqu'ici seulement `« » ’`), dans les trois skills.
+
 ## [1.6.0] - 2026-11-24
 
 ### Corrigé

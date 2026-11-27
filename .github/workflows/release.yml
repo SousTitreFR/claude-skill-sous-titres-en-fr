@@ -24,7 +24,9 @@ jobs:
             fi
           done
           grep -q "^## \[$v\]" CHANGELOG.md || { echo "::error::Aucune entrée [$v] dans CHANGELOG.md"; exit 1; }
-          cmp sous-titres-en-fr/check.py sous-titres-nettoyage-fr/check.py || { echo "::error::Les deux copies de check.py diffèrent"; exit 1; }
+          for d in sous-titres-nettoyage-fr sous-titres-nettoyage-en; do
+            cmp sous-titres-en-fr/check.py "$d/check.py" || { echo "::error::Les copies de check.py diffèrent"; exit 1; }
+          done
 
       - name: Créer un zip par skill
         run: |

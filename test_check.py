@@ -18,12 +18,12 @@ def bloc2(*lignes: str) -> str:
 CREDIT = bloc2("Synced & corrected by -robtor-", "www.addic7ed.com")
 
 
-def run_check(original: str, result: str) -> str:
+def run_check(original: str, result: str, *options: str) -> str:
     with tempfile.TemporaryDirectory() as tmp:
         src, out = Path(tmp, 'a.srt'), Path(tmp, 'a_FR.srt')
         src.write_text(original, encoding='utf-8')
         out.write_text(result, encoding='utf-8')
-        done = subprocess.run([sys.executable, str(CHECK), str(src), str(out)], capture_output=True, text=True)
+        done = subprocess.run([sys.executable, str(CHECK), str(src), str(out), *options], capture_output=True, text=True)
         return done.stdout
 
 
@@ -59,6 +59,28 @@ def test_pub_supprimee_ne_declenche_rien() -> None:
 
 def test_pub_conservee_est_signalee() -> None:
     assert 'publicité ?' in run_check(REPLIQUE_EN + PUB, REPLIQUE_FR + PUB)
+
+
+def test_en_interjection_anglaise_est_signalee() -> None:
+    for ligne in ("Uh, I don't know.", "Mm-hm.", "Uh-oh."):
+        reste = bloc2(ligne)
+        assert 'interjection' in run_check(REPLIQUE_EN + reste, REPLIQUE_EN + reste, '--en'), ligne
+
+
+def test_en_replique_propre_ne_declenche_rien() -> None:
+    # « Agent » en milieu de phrase et « Chef » sont corrects en anglais : pas de règle des grades
+    propre = bloc2("I told Agent Gibbs to look.", "Yes, Chef.")
+    assert SANS_ERREUR in run_check(REPLIQUE_EN + propre, REPLIQUE_EN + propre, '--en')
+
+
+def test_en_guillemets_courbes_sont_signales() -> None:
+    courbes = bloc2("He said “no”.")
+    assert 'typo interdite' in run_check(REPLIQUE_EN + courbes, REPLIQUE_EN + courbes, '--en')
+
+
+def test_sans_option_en_les_regles_francaises_restent() -> None:
+    grade = bloc2("J'ai dit à l'Agent Gibbs de regarder.")
+    assert 'majuscule suspecte' in run_check(REPLIQUE_EN + grade, REPLIQUE_FR + grade)
 
 
 if __name__ == '__main__':
